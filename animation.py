@@ -14,10 +14,12 @@ frames = {
 	'glide_in': (1, 2),
 	'glide_in_2': (2, 2.8),
         'bounce_first': (3, 3.5),
-	'move_head': (3.5, 4)
+	'move_head': (3.5, 4),
+	'move_away': (4.2, 4.7),
+	'move_to_middle': (4.7, 5.4)
 }
 
-TIME_UNIT = 100
+TIME_UNIT = 75
 
 # Interpolators
 def linear(i):
@@ -59,30 +61,34 @@ def init():
 
 def animate(i):
 	# Rectangles
-	objects[0].set_y(1.0 - 0.8*frame('glide_in')(i))
+	objects[0].set_y(1.0 - 0.8*frame('glide_in')(i) - 0.4*frame('move_away')(i))
 	objects[1].set_y(1.0 - 0.8*frame('glide_in')(i))
 	objects[2].set_y(1.0 - 0.8*frame('glide_in')(i))
 	objects[3].set_y(1.0 - 0.8*frame('glide_in')(i))
+
+	objects[1].set_x(0.025 + 0.25 - 0.125*frame('move_to_middle')(i))
+	objects[2].set_x(0.025 + 2*0.25 - 0.125*frame('move_to_middle')(i))
+	objects[3].set_x(0.025 + 3*0.25 - 0.125*frame('move_to_middle')(i))
 	# Arrows
 	ax.patches.remove(objects[4])
-	objects[4] = patches.Arrow(0.225, 1.025 - 0.8*frame('glide_in')(i), 0.05, 0, width=0.05, color='black')
+	objects[4] = patches.Arrow(0.225, 1.025 - 0.8*frame('glide_in')(i) - 0.4*frame('move_away')(i), 0.05, 0, width=0.05, color='black')
 	ax.add_patch(objects[4])
 	ax.patches.remove(objects[5])
-	objects[5] = patches.Arrow(0.225+0.25, 1.025 - 0.8*frame('glide_in')(i), 0.05, 0, width=0.05, color='black')
+	objects[5] = patches.Arrow(0.225+0.25 - 0.125*frame('move_to_middle')(i), 1.025 - 0.8*frame('glide_in')(i), 0.05, 0, width=0.05, color='black')
 	ax.add_patch(objects[5])
 	ax.patches.remove(objects[6])
-	objects[6] = patches.Arrow(0.225+0.5, 1.025 - 0.8*frame('glide_in')(i),0.05, 0, width=0.05, color='black')
+	objects[6] = patches.Arrow(0.225+0.5 - 0.125*frame('move_to_middle')(i), 1.025 - 0.8*frame('glide_in')(i),0.05, 0, width=0.05, color='black')
 	ax.add_patch(objects[6])
 	# Queue-Rectangle
 	objects[7].set_y(1.2 - 0.6*frame('glide_in_2')(i))
 	# Head/Tail-Arrows
 	ax.patches.remove(objects[8])
 	objects[8] = patches.FancyArrowPatch((0.3, 1.225 - 0.6*frame('glide_in_2')(i)),
-                                             (0.05 + 0.25*frame('move_head')(i), 1.0 - 0.6*frame('glide_in_2')(i)), connectionstyle="arc3,rad=.5", color='red')
+                                             (0.05 + 0.25*frame('move_head')(i) - 0.125*frame('move_to_middle')(i), 1.0 - 0.6*frame('glide_in_2')(i)), arrowstyle=u'->', connectionstyle="arc3,rad=.5", color='red')
 	ax.add_patch(objects[8])
 	ax.patches.remove(objects[9])
 	objects[9] = patches.FancyArrowPatch((0.7, 1.225 - 0.6*frame('glide_in_2')(i)),
-                                             (0.95, 1.0 - 0.6*frame('glide_in_2')(i)), connectionstyle="arc3,rad=-0.5", color='red')
+                                             (0.95 - 0.125*frame('move_to_middle')(i), 1.0 - 0.6*frame('glide_in_2')(i)), arrowstyle=u'->', connectionstyle="arc3,rad=-0.5", color='red')
 	ax.add_patch(objects[9])
 
 	return objects
@@ -91,5 +97,7 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, interval=0.01, blit
 
 #linspace = np.linspace(0,1,1000)
 #plt.plot(linspace, sine(linspace))
+
+anim.save("animation.mp4")
 
 plt.show()
