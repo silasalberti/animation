@@ -35,7 +35,7 @@ def frame(identifier, interpolator=sine):
 		elif i < frames[identifier][0]*TIME_UNIT:
 			return 0
 		else:
-			return interpolator(i/TIME_UNIT - frames[identifier][0])/(frames[identifier][1] - frames[identifier][0])
+			return interpolator((i/TIME_UNIT - frames[identifier][0])/(frames[identifier][1] - frames[identifier][0]))
 	return interpolation
 
 # Animation Setup
@@ -57,6 +57,9 @@ def init():
 
 	for obj in objects:
 		ax.add_patch(obj)
+	
+	objects.ad
+
 	return objects
 
 def animate(i):
@@ -98,6 +101,6 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, interval=0.01, blit
 #linspace = np.linspace(0,1,1000)
 #plt.plot(linspace, sine(linspace))
 
-anim.save("animation.mp4")
+#anim.save("animation.mp4")
 
 plt.show()
