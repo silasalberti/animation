@@ -57,8 +57,6 @@ def init():
 
 	for obj in objects:
 		ax.add_patch(obj)
-	
-	objects.ad
 
 	return objects
 
